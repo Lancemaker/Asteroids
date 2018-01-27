@@ -4,36 +4,33 @@ using UnityEngine;
 using UnityEngine.U2D;
 
 public class GameManager : MonoBehaviour {
-    // Use this for initialization    
-    Camera cam;
-    public float screenWidth;
-    public float screenHeight;
+    // Use this for initialization           
     GameObject player;
     public SpriteAtlas atlas;
     PlayerShip playerShip;
-    List<Asteroid> asteroids = new List<Asteroid>();
-    void Start () {
-        cam =Camera.main;
+    void Start () {        
         InitPlayer();
+        InitAsteroid();
     }
 
     //initialize the game.
     void InitPlayer() {
         //setting the player
-        player = new GameObject();
-        player.name = "Player";        
+        player = new GameObject("Player");             
         playerShip = player.AddComponent<PlayerShip>();
         playerShip.Atlas = atlas;
         playerShip.Inputs = gameObject.GetComponent<Inputs>();        
     }
-
-    void ScreenBounds() {
-        screenWidth = cam.pixelWidth;
-        screenHeight = cam.pixelHeight;
+    void InitAsteroid() {
+        GameObject asteroid = new GameObject("asteroid");
+        Asteroid asteroidScript = asteroid.AddComponent<Asteroid>();
+        asteroidScript.Atlas = atlas;
     }
-	
+    
+
+    
 	// Update is called once per frame
 	void Update () {
-        ScreenBounds();
+        
 	}
 }

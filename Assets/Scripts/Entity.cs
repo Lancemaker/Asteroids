@@ -20,6 +20,10 @@ public class Entity : MonoBehaviour {
     Collider2D eCollider;    
     SpriteRenderer eRenderer;
     Rigidbody2D rB;
+    Vector3 eSize;
+    public Camera cam;
+    public Vector3 camMax;
+    public Vector3 camMin;
     protected Collider2D ECollider
     {
         get
@@ -56,10 +60,24 @@ public class Entity : MonoBehaviour {
             rB = value;
         }
     }
+    protected Vector3 ESize
+    {
+        get
+        {
+            return eSize;
+        }
+
+        set
+        {
+            eSize = value;
+        }
+    }
+
     private void Awake()
     {
         ERenderer = gameObject.AddComponent<SpriteRenderer>();
         RB = gameObject.AddComponent<Rigidbody2D>();
+        cam = Camera.main;
     }
     
     //to search(s String) and return a filtered list(sprites)
@@ -76,5 +94,31 @@ public class Entity : MonoBehaviour {
             }
         }        
         return returnedSpriteList;
+    }    
+    protected void ScreenBounds()
+    {
+        camMax = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, 0f));
+        camMin = cam.ScreenToWorldPoint(new Vector3(0, 0, 0));
     }
+    //
+    protected void MirrorPosition(Vector2 offset) {
+        ScreenBounds();
+        if (transform.position.x - offset.x> camMax.x)            
+        {
+            RB.MovePosition(new Vector2(camMin.x, transform.position.y));
+        }
+        if (transform.position.x + offset.x < camMin.x)
+        {
+            RB.MovePosition(new Vector2(camMax.x, transform.position.y));
+        }
+        if (transform.position.y -offset.y > camMax.y)
+        {
+            RB.MovePosition(new Vector2(transform.position.x,camMin.y ));
+        }
+        if (transform.position.y +offset.y < camMin.y)
+        {
+            RB.MovePosition(new Vector2(transform.position.x,camMax.y ));
+        }
+    }
+
 }

@@ -24,7 +24,8 @@ public class Bullet : Entity {
     public void Setsprites(List<Sprite> Spritelist) {
         sprites = Spritelist.ToArray();
         ERenderer.sprite = sprites[0];
-        ECollider = gameObject.AddComponent<PolygonCollider2D>();        
+        ECollider = gameObject.AddComponent<PolygonCollider2D>();   
+        ESize = new Vector2(ECollider.bounds.size.y, ECollider.bounds.size.x);
     }
 
     public IEnumerator Animate() {
@@ -59,5 +60,6 @@ public class Bullet : Entity {
     private void FixedUpdate()
     {
         RB.AddForce(transform.up * 70);
+        MirrorPosition(ESize);
     }
 }

@@ -6,7 +6,6 @@ using UnityEngine.U2D;
 public class PlayerShip : Entity {    
     Inputs inputs;
     int currentBullet=0;
-    float Shipsize;
     int numberOfBullets = 20;    
     public Inputs Inputs
     {
@@ -21,13 +20,13 @@ public class PlayerShip : Entity {
         }
     }
     int speedIncrement = 15;
-    public float torque = 0.6f;
+    float torque = 0.6f;
     List<GameObject> bullets= new List<GameObject>();
     // Use this for initialization
     void Start () {       
         ERenderer.sprite = Atlas.GetSprite("playerShip1_blue");
         ECollider = gameObject.AddComponent<PolygonCollider2D>();
-        Shipsize = ECollider.bounds.size.y;
+        ESize = new Vector2(ECollider.bounds.size.y,ECollider.bounds.size.x);
         RB.drag = 1.5f;
         RB.angularDrag = 1f;
         gameObject.layer = 8;
@@ -56,7 +55,7 @@ public class PlayerShip : Entity {
             //Debug.Log("shoot");
             bullets[currentBullet].SetActive(true);
             Bullet bulletscript = bullets[currentBullet].GetComponent<Bullet>();
-            bulletscript.SetBullet(gameObject.transform.position,RB.rotation,Shipsize);
+            bulletscript.SetBullet(gameObject.transform.position,RB.rotation,ESize.y/2);
             StartCoroutine(bulletscript.Animate());
             currentBullet++;
         }
@@ -82,17 +81,17 @@ public class PlayerShip : Entity {
             bullets[i].tag ="PlayerBullet";
             Bullet bulletScript = bullets[i].AddComponent<Bullet>();
             bulletScript.Setsprites(laserSprites);
-            bullets[i].GetComponent<Bullet>().SetBullet(gameObject.transform.position, RB.rotation, Shipsize);
+            bullets[i].GetComponent<Bullet>().SetBullet(gameObject.transform.position, RB.rotation, ESize.y/2);
             bullets[i].SetActive(false);
         }
-    }
+    } 
 
     private void FixedUpdate()
     {
         Move();
-        
+        MirrorPosition(ESize);
     }
     void Update () {
-        Shoot();
+        Shoot();        
     }
 }
