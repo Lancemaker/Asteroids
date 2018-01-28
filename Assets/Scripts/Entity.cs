@@ -80,7 +80,7 @@ public class Entity : MonoBehaviour {
         cam = Camera.main;
     }
     
-    //to search(s String) and return a filtered list(sprites)
+    //to search "s", in the SpriteAtlas a and return a filtered list<sprites>
     protected List<Sprite> SpriteFilter(string s,SpriteAtlas a)
     {
         Sprite[] spriteArr = new Sprite[a.spriteCount];
@@ -100,7 +100,7 @@ public class Entity : MonoBehaviour {
         camMax = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, 0f));
         camMin = cam.ScreenToWorldPoint(new Vector3(0, 0, 0));
     }
-    //
+    //this method makes the object appears in the other side of the screen.
     protected void MirrorPosition(Vector2 offset) {
         ScreenBounds();
         if (transform.position.x - offset.x> camMax.x)            
@@ -120,5 +120,7 @@ public class Entity : MonoBehaviour {
             RB.MovePosition(new Vector2(transform.position.x,camMax.y ));
         }
     }
+
+
 
 }
