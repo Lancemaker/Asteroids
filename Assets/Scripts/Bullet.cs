@@ -9,7 +9,6 @@ public class Bullet : Entity {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collision");
         if (collision.collider.gameObject.tag == "asteroid")
         {
             gameObject.SetActive(false);
@@ -19,8 +18,7 @@ public class Bullet : Entity {
 
     private void OnEnable()
     {        
-        StartCoroutine(LifeClock());
-        
+        StartCoroutine(LifeClock());        
     }
 
     private void OnDisable()

@@ -9,14 +9,13 @@ public class Asteroid : Entity {
     public static event AsteroidEventHandler OnAsteroidDestroyed;
 
     //variables declaration
-    public enum Type {big,medium,small}
+    public enum Type {big,med,small}
     public Type type = Type.big;    
     
     
     // Use this for initialization
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collision");
         if (collision.collider.gameObject.tag == "PlayerBullet")
         {
             //OnAsteroidDestroyedTrigger;
@@ -30,37 +29,22 @@ public class Asteroid : Entity {
 
     private void OnEnable()
     {
-        switch (type)
+        if (type==Type.big)
         {
-            case Type.big:                
-                SetRotAndDir();
-                break;
-            case Type.medium:
-                
-                SetRotAndDir();
-                break;
-            case Type.small:
-               
-                SetRotAndDir();
-                break; 
-            default:
-                break;
+            SetInitialPos();
         }
+        SetRotAndDir();       
     }
 
-    private void OnDisable()
-    {
-        
-    }
+    
 
     void Start () {        
         ScreenBounds();
         gameObject.layer = 10;        
         //picking a random Sprite depending on the type.
         string spriteName = SpriteFilter(type.ToString(), Atlas)[Random.Range(0, 3)].name.Replace("(Clone)",string.Empty);
+        Debug.Log(spriteName);
         ERenderer.sprite = Atlas.GetSprite(spriteName);
-        
-
         //Setting colliders and initial position
         SetInitialPos();
         ECollider = gameObject.AddComponent<PolygonCollider2D>();
@@ -78,20 +62,15 @@ public class Asteroid : Entity {
         //random position and trying to avoid to put the asteroid on top of the ship.
         if(type == Type.big)
         {
-            Vector2 pos = new Vector2(Random.Range(camMin.x, camMax.x - camMax.x / 4), Random.Range(camMin.y, camMax.y - camMax.y / 4));
-            if (pos.x >= -camMax.x /4 && pos.x < camMax.x/4)
-            {
-                pos.x += camMax.x/2 ;                
-            }
-            if (pos.y >= -camMax.y /4 && pos.y < camMax.y /4)
-            {
-                pos.y += camMax.y ;                
-            }
+            Vector2 pos = new Vector2(Random.Range(camMin.x-5, camMin.x), Random.Range(camMin.y-5, camMin.y));
             RB.position = pos;
-        }
-        
+        }      
     }
 
+    public void SetPos(Vector3 position)
+    {
+        RB.position = position;
+    }
     
 
 
