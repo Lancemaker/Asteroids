@@ -28,12 +28,12 @@ SpriteAtlas:
       enableTightPacking: 1
     packedHash:
       serializedVersion: 2
-      Hash: e871500b6e7930bbb599d74ea8027f96
+      Hash: 7651b47f72028b1b562a176ba2102d67
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: e871500b6e7930bbb599d74ea8027f96
-    totalSpriteSurfaceArea: 232000
+    hashString: 7651b47f72028b1b562a176ba2102d67
+    totalSpriteSurfaceArea: 232858
     packables:
     - {fileID: 2800000, guid: e4cbe787a003cfb459c75592f7fd262f, type: 3}
     - {fileID: 2800000, guid: 8413ab9043e3aac4abce75969e9dea03, type: 3}
@@ -44,6 +44,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 9b23205b924f42b44bd40f459e1b39f9, type: 3}
     - {fileID: 21300000, guid: 55bde85764fef1b489dc4e994fdf712f, type: 3}
     - {fileID: 2800000, guid: 5e8b719868b9bdf4db79f90797c359ae, type: 3}
+    - {fileID: 2800000, guid: 74e6f315d5a9f5949b1f8768a2d42bcd, type: 3}
     packedSpriteRenderDataKeys:
     - 5e8b719868b9bdf4db79f90797c359ae: 21300000
     - cbc276f88f51220478643c0b19c24929: 21300000
@@ -75,6 +76,7 @@ SpriteAtlas:
     - 5f0318bf83500d44d9d16e3dd8799a0d: 21300000
     - fe9c819eb0955e246a58a176aaa4526d: 21300000
     - e162e17b480b1e04b897447134a0ba64: 21300000
+    - 74e6f315d5a9f5949b1f8768a2d42bcd: 21300000
     - b23c626f2e1a77b409153240d41112b0: 21300000
     - 16c87f7856cfc4646bbb4274c21ffe75: 21300000
     - 57b9365dfa0e3d045a0a1f21a7cf7199: 21300000
@@ -152,6 +154,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5f0318bf83500d44d9d16e3dd8799a0d, type: 3}
   - {fileID: 21300000, guid: fe9c819eb0955e246a58a176aaa4526d, type: 3}
   - {fileID: 21300000, guid: e162e17b480b1e04b897447134a0ba64, type: 3}
+  - {fileID: 21300000, guid: 74e6f315d5a9f5949b1f8768a2d42bcd, type: 3}
   - {fileID: 21300000, guid: b23c626f2e1a77b409153240d41112b0, type: 3}
   - {fileID: 21300000, guid: 16c87f7856cfc4646bbb4274c21ffe75, type: 3}
   - {fileID: 21300000, guid: 57b9365dfa0e3d045a0a1f21a7cf7199, type: 3}
@@ -228,6 +231,7 @@ SpriteAtlas:
   - laserGreen16
   - laserBlue10
   - laserRed10
+  - playerLife1_blue
   - meteorGrey_small1
   - meteorBrown_small1
   - meteorGrey_small2

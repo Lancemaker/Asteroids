@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 
-public class PlayerShip : Entity {    
+public class PlayerShip : Entity {
     Inputs inputs;
-    int currentBullet=0;
-    int numberOfBullets = 20;    
+    int currentBullet = 0;
+    int numberOfBullets = 20;
     public Inputs Inputs
     {
         get
@@ -23,15 +23,29 @@ public class PlayerShip : Entity {
     float torque = 0.5f;
     GameObject turbinePrefab;
     GameObject turbine;
-    List<GameObject> bullets= new List<GameObject>();
+    List<GameObject> bullets = new List<GameObject>();
+
+    //delegates & events definition
+    public delegate void ShipEventHandler(bool col);
+    public static event ShipEventHandler OnShipHit;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("collision");
         if (collision.collider.gameObject.tag == "asteroid")
         {
+            //OnshipHit Event Trigger
+            if(OnShipHit != null)
+            {
+                OnShipHit(true);
+            }            
             gameObject.SetActive(false);
         }
+    }
+
+    public void Ressurrection()
+    {
+
     }
 
 

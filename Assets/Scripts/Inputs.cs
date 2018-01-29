@@ -6,7 +6,7 @@ public class Inputs : MonoBehaviour
 {
     public float horizontal;
     public float vertical;
-    public bool shoot;
+    public bool shoot,menu;
     void Update()
     {
     #if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
@@ -14,6 +14,7 @@ public class Inputs : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         shoot = Input.GetKeyDown(KeyCode.Space);
+        menu = Input.GetKeyDown(KeyCode.Escape);
     #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         //para implementar inputs mobile.
     #endif

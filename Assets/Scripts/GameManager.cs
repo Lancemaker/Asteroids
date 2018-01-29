@@ -2,42 +2,116 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour {               
     GameObject player, asteroidContainer;
+    public GameObject mainMenu,gameOverMenu,LivesAndPoints;    
     public SpriteAtlas atlas;
     PlayerShip playerShip;
     public List<GameObject> Enemies = new List<GameObject>();
-    bool gameOver = false;
+    bool gameOver = true;
     int lives = 3;
-    int points = 0;
+    int score = 0;
+    int ScoreGoalToLife = 10000;
     int enemiesInc,  EnemyStartingWave;
     public int activeEnemies;
-
-
+    Inputs inputs;    
     //start
-    void Start () {        
-        InitPlayer();
-        EnemiesPool();
-        StartCoroutine(Waves());
+    void Start () {
+        inputs = gameObject.GetComponent<Inputs>();
         //events subscription
         Asteroid.OnAsteroidDestroyed += AsteroidDestroyedReact;
+        PlayerShip.OnShipHit += ShipHitReact;
+
     }
     private void OnDisable()
-    {
+    {       
         //events unsubscription
         Asteroid.OnAsteroidDestroyed -= AsteroidDestroyedReact;
+        PlayerShip.OnShipHit -= ShipHitReact;
+    }
+
+    public void StartGame() {
+        if(gameOver == true)
+        {            
+            gameOver = false;
+            InitPlayer();
+            EnemiesPool();
+            StartCoroutine(Waves());
+            LivesAndPoints.SetActive(true);
+        }
+        if (Time.timeScale == 0)
+        {
+            Unpause();
+        }
     }
 
     void AsteroidDestroyedReact(Asteroid.Type type, Vector3 pos)
-    {
+    {        
         activeEnemies--;
         //if its not a small asteroid enable 2 smaller asteroids from the pool.
         if (type != Asteroid.Type.small)
         {
             enableNextSubAsteroidInPool(type,pos);            
         }
+        SetPoints(type);
     }
+
+    void ShipHitReact(bool b)
+    {
+        if (lives<=0)
+        {
+            gameOver = true;
+            LivesAndPoints.SetActive(false);
+            gameOverMenu.SetActive(true);
+        }
+        else
+        {
+            lives--;
+            RefreshUI();
+            StartCoroutine(PlayerRevive());
+        }
+    }
+
+    IEnumerator PlayerRevive()
+    {
+        yield return new WaitForSeconds(1f);
+        player.SetActive(true);
+    }
+
+    void SetPoints(Asteroid.Type type)
+    {
+        switch (type)
+        {
+            case Asteroid.Type.big:
+                score += 200;
+                break;
+            case Asteroid.Type.med:
+                score += 250;
+                break;
+            case Asteroid.Type.small:
+                score += 300;
+                break;
+            default:
+                break;
+        }
+        if (score>=ScoreGoalToLife)
+        {            
+            lives++;
+            ScoreGoalToLife += 10000;
+        }
+        RefreshUI();
+    }
+
+    void RefreshUI()
+    {
+        LivesAndPointsUI lp = LivesAndPoints.GetComponent<LivesAndPointsUI>();
+        lp.RenderScore(score);
+        lp.RenderLives(lives);
+    }
+
 
     void enableNextSubAsteroidInPool(Asteroid.Type type,Vector3 pos)
     {
@@ -88,7 +162,7 @@ public class GameManager : MonoBehaviour {
         player = new GameObject("Player");             
         playerShip = player.AddComponent<PlayerShip>();
         playerShip.Atlas = atlas;
-        playerShip.Inputs = gameObject.GetComponent<Inputs>();         
+        playerShip.Inputs = inputs;         
     }
     void InitAsteroid(Asteroid.Type type) {        
         GameObject asteroid = new GameObject("asteroid");
@@ -117,8 +191,7 @@ public class GameManager : MonoBehaviour {
                 InitAsteroid(Asteroid.Type.small);
             }
         }
-    }
-        
+    }        
     IEnumerator Waves() {
         EnemyStartingWave = 5;
         activeEnemies = 0;
@@ -139,5 +212,39 @@ public class GameManager : MonoBehaviour {
         }
         Debug.Log("Game Over");
         yield return null;
+    }
+
+    void Pause(){
+        Time.timeScale = 0;
+    }
+    void Unpause() {
+        Time.timeScale = 1;
+    } 
+
+
+    void SwitchMenuPause()
+    {
+        if (inputs.menu)
+        {
+            if (mainMenu.activeSelf==false && !gameOver)
+            {
+                mainMenu.SetActive(true);
+                Pause();
+            }
+            else if(!gameOver)
+            {
+                mainMenu.SetActive(false);
+                Unpause();
+            }
+        }
+    }
+
+    public void Reload()
+    {
+        SceneManager.LoadScene(0);
+    }
+    private void Update()
+    {
+        SwitchMenuPause();
     }
 }
