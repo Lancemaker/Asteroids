@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour {
+public class AudioManager : MonoBehaviour
+{
     static bool AudioBegin = false;
+    public AudioSource explosionShip;
+    public AudioSource explosionAsteroid;
     void Awake()
     {
         if (!AudioBegin)
@@ -12,5 +15,27 @@ public class AudioManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
             AudioBegin = true;
         }
+    }
+    private void Start()
+    {
+        //events subscription
+        PlayerShip.OnShipHit += PlayShipExplosion;
+        Asteroid.OnAsteroidDestroyed += PlayAsteroidExplosion;
+    }
+
+    private void OnDisable()
+    {
+        //events unsubscription
+        PlayerShip.OnShipHit -= PlayShipExplosion;
+        Asteroid.OnAsteroidDestroyed -= PlayAsteroidExplosion;
+    }
+
+    void PlayShipExplosion(bool i)
+    {
+        explosionShip.Play();
+    }
+    void PlayAsteroidExplosion(Asteroid.Type type, Vector3 pos)
+    {
+        explosionAsteroid.Play();
     }
 }

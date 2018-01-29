@@ -5,7 +5,11 @@ using UnityEngine.U2D;
 using UnityEngine.SceneManagement;
 
 
-public class GameManager : MonoBehaviour {               
+public class GameManager : MonoBehaviour {
+    //delegates & events declaration
+    public delegate void GameManagerDifficultyEventHandler(int difficultyLevel);
+    public static event GameManagerDifficultyEventHandler OnDifficultyChange;
+    //variables
     GameObject player, asteroidContainer;
     public GameObject mainMenu,gameOverMenu,LivesAndPoints;    
     public SpriteAtlas atlas;
@@ -66,6 +70,7 @@ public class GameManager : MonoBehaviour {
             gameOver = true;
             LivesAndPoints.SetActive(false);
             gameOverMenu.SetActive(true);
+            gameOverMenu.GetComponent<Highscores>().SetScore(score);
         }
         else
         {
@@ -171,7 +176,7 @@ public class GameManager : MonoBehaviour {
         asteroidScript.Atlas = atlas;
         asteroidScript.type = type;
         Enemies.Add(asteroid);
-        asteroid.SetActive(false);
+        asteroid.SetActive(false);        
     }
     //to 0-19 big, up to 59 medium, up to 139 small asteroids;
     void EnemiesPool(){
@@ -208,7 +213,13 @@ public class GameManager : MonoBehaviour {
             {
                 enemiesInc++;
                 EnemyStartingWave = enemiesInc;
-            }            
+                //event Trigger OnDifficultyChange
+                if(OnDifficultyChange != null)
+                {
+                    OnDifficultyChange(EnemyStartingWave);
+                }
+            }
+
         }
         Debug.Log("Game Over");
         yield return null;
