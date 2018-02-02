@@ -39,10 +39,9 @@ public class PlayerShip : Entity {
             //OnshipHit Event Trigger
             if(OnShipHit != null)
             {
-                OnShipHit(true);
-                
-            }            
-            gameObject.SetActive(false);
+                OnShipHit(true);                
+            }
+            ECollider.enabled = false;            
         }
     }
     
@@ -81,8 +80,7 @@ public class PlayerShip : Entity {
         }
         if (Inputs.horizontal > 0 )
         {
-            RB.AddTorque(-torque);
-            
+            RB.AddTorque(-torque);            
         }
         else if(Inputs.horizontal <0)
         {
@@ -103,10 +101,9 @@ public class PlayerShip : Entity {
     void Shoot() {     
 
         if (Inputs.shoot && currentBullet < bullets.Count && !bullets[currentBullet].activeSelf)
-        {
-            //Debug.Log("shoot");
+        {            
+            Bullet bulletscript = bullets[currentBullet].GetComponent<Bullet>();
             bullets[currentBullet].SetActive(true);
-            Bullet bulletscript = bullets[currentBullet].GetComponent<Bullet>();            
             bulletscript.SetBullet(gameObject.transform.position,RB.rotation,ESize.y/2);            
             currentBullet++;
             pewpew.Play();
@@ -136,6 +133,20 @@ public class PlayerShip : Entity {
             bullets[i].SetActive(false);
         }
     } 
+
+    public IEnumerator RessurectionAnim()
+    {
+
+        for (int i = 0; i < 11; i++)
+        {
+
+            ERenderer.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            ERenderer.enabled =  true;
+            yield return new WaitForSeconds(0.1f);
+        }
+        ECollider.enabled = true;
+    }
 
     private void FixedUpdate()
     {

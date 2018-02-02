@@ -47,13 +47,14 @@ public class Asteroid : Entity {
         //picking a random Sprite depending on the type.
         string spriteName = SpriteFilter(type.ToString(), Atlas)[Random.Range(0, 3)].name.Replace("(Clone)",string.Empty);
         ERenderer.sprite = Atlas.GetSprite(spriteName);
-        //Setting colliders and initial position
-        SetInitialPos();
+        //Setting colliders and initial position        
         ECollider = gameObject.AddComponent<PolygonCollider2D>();
         ESize = new Vector2(ECollider.bounds.size.y, ECollider.bounds.size.x);
         gameObject.tag = "asteroid";
+        SetInitialPos();
         //events subscription
         GameManager.OnDifficultyChange += SetDifficulty;
+
     }
     
     void SetDifficulty(int d)
@@ -62,11 +63,11 @@ public class Asteroid : Entity {
     }
 
 
-    void SetRotAndDir(int d) {
+    void SetRotAndDir(int d) {        
         RB.AddTorque(Random.Range(0, 10));
-        RB.AddForce( new Vector2(Random.Range(-20, 20)*d, Random.Range(-20, 20)*d));
+        RB.AddForce( new Vector2(Random.Range(-20, 20)*d, Random.Range(-20, 20)*d));        
     }  
-
+    //!!!create a coroutine to push the objects in the right time.
     void SetInitialPos()
     {
         //random position and trying to avoid putting the asteroid on top of the ship.
@@ -76,13 +77,10 @@ public class Asteroid : Entity {
             RB.position = pos;
         }      
     }
-
-    public void SetPos(Vector3 position)
+    IEnumerator WaitAndMove()
     {
-        RB.position = position;
+        yield return new WaitForFixedUpdate();        
     }
-    
-
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -91,5 +89,6 @@ public class Asteroid : Entity {
     }
     void Update () {
 		
+
 	}
 }

@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour {
         //events subscription
         Asteroid.OnAsteroidDestroyed += AsteroidDestroyedReact;
         PlayerShip.OnShipHit += ShipHitReact;
-
     }
     private void OnDisable()
     {       
@@ -68,6 +67,7 @@ public class GameManager : MonoBehaviour {
         if (lives<=0)
         {
             gameOver = true;
+            player.SetActive(false);
             LivesAndPoints.SetActive(false);
             gameOverMenu.SetActive(true);
             gameOverMenu.GetComponent<Highscores>().SetScore(score);
@@ -76,14 +76,13 @@ public class GameManager : MonoBehaviour {
         {
             lives--;
             RefreshUI();
-            StartCoroutine(PlayerRevive());
+            PlayerRevive();
         }
     }
 
-    IEnumerator PlayerRevive()
+    void PlayerRevive()
     {
-        yield return new WaitForSeconds(1f);
-        player.SetActive(true);
+        StartCoroutine(playerShip.RessurectionAnim());
     }
 
     void SetPoints(Asteroid.Type type)
@@ -129,8 +128,8 @@ public class GameManager : MonoBehaviour {
                 {                    
                     if (Enemies[i].activeSelf == false)
                     {
-                        Enemies[i].SetActive(true);
-                        Enemies[i].GetComponent<Asteroid>().SetPos(pos);
+                        Enemies[i].transform.position = pos;
+                        Enemies[i].SetActive(true);                       
                         enabledCount++;
                         activeEnemies++;
                     }
@@ -145,8 +144,8 @@ public class GameManager : MonoBehaviour {
                 {
                     if (Enemies[i].activeSelf == false)
                     {
-                        Enemies[i].SetActive(true);
-                        Enemies[i].GetComponent<Asteroid>().SetPos(pos);
+                        Enemies[i].transform.position = pos;
+                        Enemies[i].SetActive(true);                       
                         enabledCount++;
                         activeEnemies++;
                     }

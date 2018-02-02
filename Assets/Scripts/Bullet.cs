@@ -62,16 +62,15 @@ public class Bullet : Entity {
         yield return new WaitForSeconds(lifetime);        
         ERenderer.enabled = false;
         ECollider.enabled = false;
-        gameObject.SetActive(false);
-        RB.MovePosition(new Vector2(100, 100));
+        gameObject.SetActive(false);        
     }
 
     //positions, rotate and offsets the beam .
     public void SetBullet(Vector3 pos,float rot,float offset)
     {
         float targetX = Mathf.Cos((rot+90)*Mathf.PI/180)*offset+pos.x;
-        float targetY = Mathf.Sin((rot+90)*Mathf.PI/180)*offset+pos.y;        
-        RB.MovePosition(new Vector2(targetX, targetY));
+        float targetY = Mathf.Sin((rot+90)*Mathf.PI/180)*offset+pos.y;
+        gameObject.transform.position = new Vector3(targetX, targetY,0);        
         RB.MoveRotation(rot);
         ECollider.enabled = true;
         StartCoroutine(Animate());
