@@ -1,6 +1,7 @@
 # Asteroids
 Atempting a classic.
-please report bugs if you find them. 
+
+Please, report bugs if you find them. 
 
 https://lancemaker.github.io/Asteroids/
 
